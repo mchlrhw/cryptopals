@@ -1,1 +1,1 @@
-from .cryptopals import foo
+from .cryptopals import foo  # noqa
