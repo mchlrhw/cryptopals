@@ -1,0 +1,12 @@
+[package]
+name = "cryptopals"
+version = "0.1.0"
+authors = ["mchlrhw <4028654+mchlrhw@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+name = "cryptopals"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = {version = "0.8", features= ["extension-module"] }
