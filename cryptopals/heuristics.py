@@ -1,8 +1,11 @@
+from . import score_bytes_as_english
+
+
 class InputTooShort(Exception):
     ...
 
 
-def score_bytes_as_english(text: bytes) -> float:
+def py_score_bytes_as_english(text: bytes) -> float:
     if not text:
         return -1.0
 

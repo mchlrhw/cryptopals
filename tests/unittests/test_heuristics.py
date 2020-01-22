@@ -2,11 +2,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import binary
 
-from cryptopals.heuristics import (
-    InputTooShort,
-    looks_like_english,
-    score_bytes_as_english,
-)
+from cryptopals import score_bytes_as_english
+from cryptopals.heuristics import InputTooShort, looks_like_english
 
 
 def test_score_bytes_as_english_empty_input():

@@ -1,4 +1,5 @@
 from .cryptopals import fixed_xor as _fixed_xor
+from .cryptopals import score_bytes_as_english
 from .cryptopals import single_byte_xor as _single_byte_xor
 
 
