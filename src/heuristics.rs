@@ -32,3 +32,14 @@ pub(crate) fn score_bytes_as_english(text: &[u8]) -> f64 {
 
     score / (2.0 * (text.len() as f64))
 }
+
+pub(crate) fn looks_like_english(text: &[u8], threshold: f64) -> Result<bool, String> {
+    if text.len() < 10 {
+        return Err("Input too short".to_string());
+    }
+
+    match score_bytes_as_english(text) {
+        score if score > threshold => Ok(true),
+        _ => Ok(false),
+    }
+}
