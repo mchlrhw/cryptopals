@@ -1,4 +1,4 @@
-from cryptopals import single_byte_xor
+from cryptopals.ciphers import single_byte_xor
 from cryptopals.heuristics import score_bytes_as_english
 from cryptopals.serde import from_hex
 

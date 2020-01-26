@@ -1,4 +1,4 @@
-from cryptopals import fixed_xor
+from cryptopals.ciphers import fixed_xor
 from cryptopals.serde import from_hex, to_hex
 
 

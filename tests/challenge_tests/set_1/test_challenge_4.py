@@ -1,6 +1,6 @@
 import os
 
-from cryptopals import single_byte_xor
+from cryptopals.ciphers import single_byte_xor
 from cryptopals.heuristics import looks_like_english
 from cryptopals.serde import from_hex
 

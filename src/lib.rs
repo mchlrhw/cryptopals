@@ -63,7 +63,7 @@ fn score_bytes_as_english(text: &[u8]) -> PyResult<f64> {
 }
 
 #[pymodule]
-fn cryptopals(_py: Python, m: &PyModule) -> PyResult<()> {
+fn rust(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(fixed_xor))?;
     m.add_wrapped(wrap_pyfunction!(single_byte_xor))?;
     m.add_wrapped(wrap_pyfunction!(score_bytes_as_english))?;

@@ -5,7 +5,7 @@ authors = ["mchlrhw <4028654+mchlrhw@users.noreply.github.com>"]
 edition = "2018"
 
 [lib]
-name = "cryptopals"
+name = "rust"
 crate-type = ["cdylib"]
 
 [dependencies]
