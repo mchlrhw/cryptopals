@@ -16,6 +16,11 @@ fn single_byte_xor(plaintext: &[u8], key: u8) -> PyResult<Vec<u8>> {
 }
 
 #[pyfunction]
+fn repeating_key_xor(plaintext: &[u8], key: &[u8]) -> PyResult<Vec<u8>> {
+    Ok(ciphers::repeating_key_xor(plaintext, key))
+}
+
+#[pyfunction]
 fn score_bytes_as_english(text: &[u8]) -> PyResult<f64> {
     Ok(heuristics::score_bytes_as_english(text))
 }
@@ -29,6 +34,7 @@ fn detect_single_byte_xor(lines: Vec<&[u8]>) -> PyResult<Option<Vec<u8>>> {
 fn rust(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(fixed_xor))?;
     m.add_wrapped(wrap_pyfunction!(single_byte_xor))?;
+    m.add_wrapped(wrap_pyfunction!(repeating_key_xor))?;
 
     m.add_wrapped(wrap_pyfunction!(score_bytes_as_english))?;
 
