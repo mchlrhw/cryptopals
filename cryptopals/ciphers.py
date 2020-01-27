@@ -1,18 +1,1 @@
-from .rust import fixed_xor as _fixed_xor
-from .rust import repeating_key_xor as _repeating_key_xor
-from .rust import single_byte_xor as _single_byte_xor
-
-# TODO: Find a way of not having to wrap in bytes
-#       i.e. allocate and return the bytes from Rust
-
-
-def fixed_xor(*args, **kwargs) -> bytes:
-    return bytes(_fixed_xor(*args, **kwargs))
-
-
-def single_byte_xor(*args, **kwargs) -> bytes:
-    return bytes(_single_byte_xor(*args, **kwargs))
-
-
-def repeating_key_xor(*args, **kwargs) -> bytes:
-    return bytes(_repeating_key_xor(*args, **kwargs))
+from .rust import fixed_xor, repeating_key_xor, single_byte_xor  # noqa: F401

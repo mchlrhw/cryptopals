@@ -3,22 +3,8 @@ mod heuristics;
 mod utils;
 
 use pyo3::prelude::*;
+use pyo3::types::PyBytes;
 use pyo3::wrap_pyfunction;
-
-#[pyfunction]
-fn fixed_xor(plaintext: &[u8], key: &[u8]) -> PyResult<Vec<u8>> {
-    Ok(ciphers::fixed_xor(plaintext, key))
-}
-
-#[pyfunction]
-fn single_byte_xor(plaintext: &[u8], key: u8) -> PyResult<Vec<u8>> {
-    Ok(ciphers::single_byte_xor(plaintext, key))
-}
-
-#[pyfunction]
-fn repeating_key_xor(plaintext: &[u8], key: &[u8]) -> PyResult<Vec<u8>> {
-    Ok(ciphers::repeating_key_xor(plaintext, key))
-}
 
 #[pyfunction]
 fn score_bytes_as_english(text: &[u8]) -> PyResult<f64> {
@@ -32,9 +18,27 @@ fn detect_single_byte_xor(lines: Vec<&[u8]>) -> PyResult<Option<Vec<u8>>> {
 
 #[pymodule]
 fn rust(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_wrapped(wrap_pyfunction!(fixed_xor))?;
-    m.add_wrapped(wrap_pyfunction!(single_byte_xor))?;
-    m.add_wrapped(wrap_pyfunction!(repeating_key_xor))?;
+    #[pyfn(m, "fixed_xor")]
+    fn fixed_xor<'py>(py: Python<'py>, plaintext: &[u8], key: &[u8]) -> PyResult<&'py PyBytes> {
+        let ciphertext = ciphers::fixed_xor(plaintext, key);
+        Ok(PyBytes::new(py, &ciphertext))
+    }
+
+    #[pyfn(m, "single_byte_xor")]
+    fn single_byte_xor<'py>(py: Python<'py>, plaintext: &[u8], key: u8) -> PyResult<&'py PyBytes> {
+        let ciphertext = ciphers::single_byte_xor(plaintext, key);
+        Ok(PyBytes::new(py, &ciphertext))
+    }
+
+    #[pyfn(m, "repeating_key_xor")]
+    fn repeating_key_xor<'py>(
+        py: Python<'py>,
+        plaintext: &[u8],
+        key: &[u8],
+    ) -> PyResult<&'py PyBytes> {
+        let ciphertext = ciphers::repeating_key_xor(plaintext, key);
+        Ok(PyBytes::new(py, &ciphertext))
+    }
 
     m.add_wrapped(wrap_pyfunction!(score_bytes_as_english))?;
 
