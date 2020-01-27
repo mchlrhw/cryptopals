@@ -1,4 +1,5 @@
 test:
+	cargo fmt -- --check
 	cargo clippy
 	cargo test
 	poetry run pytest --black --cov=cryptopals --flake8 --isort --mypy
