@@ -1,7 +1,7 @@
 import os
 
 from cryptopals.serde import from_hex
-from cryptopals.utils import detect_single_byte_xor
+from cryptopals.utils import break_single_byte_xor
 
 
 def test_detect_single_byte_xor():
@@ -9,6 +9,6 @@ def test_detect_single_byte_xor():
     with open(test_data_path) as test_data:
         lines = [from_hex(l.strip()) for l in test_data.readlines()]
 
-    plaintext = detect_single_byte_xor(lines)
+    plaintext, _ = break_single_byte_xor(lines)
 
     assert plaintext == b"Now that the party is jumping\n"

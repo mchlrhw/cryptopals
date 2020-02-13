@@ -1,3 +1,6 @@
+build:
+	cargo build
+
 test:
 	cargo fmt -- --check
 	cargo clippy
