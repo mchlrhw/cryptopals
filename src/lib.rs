@@ -1,38 +1,40 @@
-use base64::Engine;
-use itertools::Itertools;
+pub mod encoding;
+
+use encoding::{bytes_to_hex, hex_to_bytes};
 
 #[derive(Debug, thiserror::Error)]
-enum Error {
-    #[error("{pair} is not a valid hex character pair")]
-    InvalidHexChunkSize { pair: String },
-
+pub enum Error {
     #[error(transparent)]
-    InvalidHexPair(#[from] std::num::ParseIntError),
+    InvalidEncoding(#[from] encoding::Error),
+
+    #[error("the plaintext and key lengths are mismatched")]
+    InvalidKeyLength { plain: usize, key: usize },
 }
 
 type Result<T> = std::result::Result<T, Error>;
 
-fn hex_to_bytes(hex: &str) -> Result<Vec<u8>> {
-    hex.chars()
-        .chunks(2)
-        .into_iter()
-        .map(|chunk| {
-            let pair: String = chunk.collect();
-            if pair.len() != 2 {
-                Err(Error::InvalidHexChunkSize { pair })
-            } else {
-                Ok(u8::from_str_radix(&pair, 16)?)
-            }
-        })
-        .collect()
+fn fixed_xor(plaintext: &[u8], key: &[u8]) -> Result<Vec<u8>> {
+    if plaintext.len() != key.len() {
+        return Err(Error::InvalidKeyLength {
+            plain: plaintext.len(),
+            key: key.len(),
+        });
+    }
+
+    Ok(plaintext
+        .iter()
+        .zip(key.iter())
+        .map(|(p, k)| p ^ k)
+        .collect())
 }
 
-fn bytes_to_base64(bytes: &[u8]) -> String {
-    base64::engine::general_purpose::STANDARD.encode(bytes)
-}
+pub fn fixed_xor_hex(plaintext: &str, key: &str) -> Result<String> {
+    let plaintext_bytes = hex_to_bytes(plaintext)?;
+    let key_bytes = hex_to_bytes(key)?;
 
-fn hex_to_base64(hex: &str) -> Result<String> {
-    Ok(bytes_to_base64(&hex_to_bytes(hex)?))
+    let ciphertext_bytes = fixed_xor(&plaintext_bytes, &key_bytes)?;
+
+    Ok(bytes_to_hex(&ciphertext_bytes))
 }
 
 #[cfg(test)]
@@ -40,13 +42,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn hex_to_base64_works() -> anyhow::Result<()> {
-        let hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-        let expected = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+    fn fixed_xor_works() -> anyhow::Result<()> {
+        let plaintext = "1c0111001f010100061a024b53535009181c";
+        let key = "686974207468652062756c6c277320657965";
+        let expected = "746865206b696420646f6e277420706c6179";
 
-        let base64 = hex_to_base64(hex)?;
+        let ciphertext = fixed_xor_hex(plaintext, key)?;
 
-        assert_eq!(base64, expected);
+        assert_eq!(ciphertext, expected);
 
         Ok(())
     }
