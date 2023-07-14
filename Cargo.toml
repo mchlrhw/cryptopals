@@ -3,13 +3,17 @@ name = "cryptopals"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "0103"
+path = "src/bin/set-01-challenge-03.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.71"
 base64 = "0.21.2"
+float-ord = "0.3.2"
 hex = "0.4.3"
 itertools = "0.11.0"
+lazy_static = "1.4.0"
 thiserror = "1.0.43"
-
-[dev-dependencies]
-anyhow = "1.0.71"
